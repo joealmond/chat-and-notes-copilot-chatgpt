@@ -53,6 +53,16 @@ export const RATE_LIMIT_DEFS = {
   // General API: 60 per minute
   apiCall: { kind: 'token bucket' as const, rate: 60, period: 60_000, capacity: 80 },
 
+  // Workspace bootstrap and management
+  createWorkspace: { kind: 'token bucket' as const, rate: 5, period: 60_000, capacity: 5 },
+
+  // Debounced note autosave target
+  saveNote: { kind: 'token bucket' as const, rate: 120, period: 60_000, capacity: 180 },
+
+  // Chat operations
+  createChatChannel: { kind: 'token bucket' as const, rate: 20, period: 60_000, capacity: 30 },
+  sendChatMessage: { kind: 'token bucket' as const, rate: 90, period: 60_000, capacity: 120 },
+
   // Auth: 5 login attempts per minute
   loginAttempt: { kind: 'token bucket' as const, rate: 5, period: 60_000, capacity: 5 },
 

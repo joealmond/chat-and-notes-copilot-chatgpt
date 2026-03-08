@@ -35,7 +35,7 @@ export default defineConfig(() => {
       noExternal: ['@convex-dev/better-auth'],
     },
     server: {
-      port: 3000,
+      port: 3002,
     },
     build: {
       minify: 'terser' as const,

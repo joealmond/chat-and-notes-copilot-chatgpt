@@ -92,7 +92,7 @@ npx convex env set GOOGLE_CLIENT_SECRET "your-google-client-secret"
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+Open [http://localhost:3002](http://localhost:3002)
 
 ### Available Scripts
 

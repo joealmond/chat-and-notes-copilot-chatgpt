@@ -14,26 +14,28 @@
  */
 
 :root {
-  --background: #ffffff;
-  --foreground: #0a0f1e;
-  --card: #ffffff;
-  --card-foreground: #0a0f1e;
-  --popover: #ffffff;
-  --popover-foreground: #0a0f1e;
-  --primary: #3b82f6;
-  --primary-foreground: #f8fafc;
-  --secondary: #f1f5f9;
-  --secondary-foreground: #1e293b;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --accent: #f1f5f9;
-  --accent-foreground: #1e293b;
-  --destructive: #ef4444;
-  --destructive-foreground: #f8fafc;
-  --border: #e2e8f0;
-  --input: #e2e8f0;
-  --ring: #3b82f6;
-  --radius: 0.5rem;
+  --background: #0f1115;
+  --foreground: #f2f4f8;
+  --card: #11141a;
+  --card-foreground: #f2f4f8;
+  --popover: #11141a;
+  --popover-foreground: #f2f4f8;
+  --primary: #d7dce5;
+  --primary-foreground: #0f1115;
+  --secondary: #161a21;
+  --secondary-foreground: #d7dce5;
+  --muted: #15181f;
+  --muted-foreground: #8d96a7;
+  --accent: #191d25;
+  --accent-foreground: #f2f4f8;
+  --destructive: #a84a4a;
+  --destructive-foreground: #f2f4f8;
+  --border: #262c37;
+  --input: #262c37;
+  --ring: #717b90;
+  --panel: #12161d;
+  --panel-muted: #0d1015;
+  --radius: 0.375rem;
 }
 
 * {
@@ -43,10 +45,8 @@
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family:
-    system-ui,
-    -apple-system,
-    sans-serif;
+  font-family: 'IBM Plex Sans', sans-serif;
+  letter-spacing: -0.01em;
 }
 
 @theme inline {
@@ -73,26 +73,160 @@ body {
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-panel: var(--panel);
+  --color-panel-muted: var(--panel-muted);
 }
 
 .dark {
-  --background: #020817;
-  --foreground: #f8fafc;
-  --card: #020817;
-  --card-foreground: #f8fafc;
-  --popover: #020817;
-  --popover-foreground: #f8fafc;
-  --primary: #3b82f6;
-  --primary-foreground: #f8fafc;
-  --secondary: #1e293b;
-  --secondary-foreground: #f8fafc;
-  --muted: #1e293b;
-  --muted-foreground: #94a3b8;
-  --accent: #1e293b;
-  --accent-foreground: #f8fafc;
-  --destructive: #7f1d1d;
-  --destructive-foreground: #f8fafc;
-  --border: #1e293b;
-  --input: #1e293b;
-  --ring: #1d4ed8;
+  --background: #0f1115;
+  --foreground: #f2f4f8;
+  --card: #11141a;
+  --card-foreground: #f2f4f8;
+  --popover: #11141a;
+  --popover-foreground: #f2f4f8;
+  --primary: #d7dce5;
+  --primary-foreground: #0f1115;
+  --secondary: #161a21;
+  --secondary-foreground: #d7dce5;
+  --muted: #15181f;
+  --muted-foreground: #8d96a7;
+  --accent: #191d25;
+  --accent-foreground: #f2f4f8;
+  --destructive: #a84a4a;
+  --destructive-foreground: #f2f4f8;
+  --border: #262c37;
+  --input: #262c37;
+  --ring: #717b90;
+  --panel: #12161d;
+  --panel-muted: #0d1015;
+}
+
+html {
+  background: var(--background);
+}
+
+body {
+  min-height: 100vh;
+}
+
+a,
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+::selection {
+  background: #2a303b;
+  color: var(--foreground);
+}
+
+code,
+pre,
+.font-mono {
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.note-editor {
+  color: var(--foreground);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.note-editor > * + * {
+  margin-top: 0.85rem;
+}
+
+.note-editor h1,
+.note-editor h2,
+.note-editor h3 {
+  color: var(--foreground);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.note-editor h1 {
+  font-size: 2rem;
+}
+
+.note-editor h2 {
+  font-size: 1.5rem;
+}
+
+.note-editor h3 {
+  font-size: 1.2rem;
+}
+
+.note-editor p,
+.note-editor li,
+.note-editor blockquote {
+  color: var(--foreground);
+}
+
+.note-editor ul,
+.note-editor ol {
+  padding-left: 1.5rem;
+}
+
+.note-editor ul {
+  list-style: disc;
+}
+
+.note-editor ol {
+  list-style: decimal;
+}
+
+.note-editor blockquote {
+  border-left: 2px solid var(--border);
+  padding-left: 0.9rem;
+  color: var(--muted-foreground);
+}
+
+.note-editor code {
+  border: 1px solid var(--border);
+  background: var(--panel-muted);
+  padding: 0.1rem 0.35rem;
+  font-size: 12px;
+}
+
+.note-editor pre {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  background: var(--panel-muted);
+  padding: 0.9rem;
+}
+
+.note-editor pre code {
+  border: 0;
+  background: transparent;
+  padding: 0;
+}
+
+.note-editor .is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  color: var(--muted-foreground);
+  pointer-events: none;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2a303b transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #2a303b;
+  border: 2px solid var(--background);
 }

@@ -38,6 +38,9 @@
     "@tanstack/react-router": "^1.158.4",
     "@tanstack/react-router-ssr-query": "^1.158.4",
     "@tanstack/react-start": "^1.159.0",
+    "@tiptap/extension-placeholder": "^3.20.1",
+    "@tiptap/react": "^3.20.1",
+    "@tiptap/starter-kit": "^3.20.1",
     "better-auth": "^1.4.9",
     "convex": "^1.31.7",
     "convex-helpers": "^0.1.112",
@@ -45,7 +48,10 @@
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "react-hook-form": "^7.57.0",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
     "sonner": "^2.0.7",
+    "tiptap-markdown": "^0.9.0",
     "zod": "^4.3.5"
   },
   "optionalDependencies": {

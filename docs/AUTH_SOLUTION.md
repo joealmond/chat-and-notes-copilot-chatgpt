@@ -145,7 +145,7 @@ VITE_CONVEX_URL=https://your-deployment.convex.cloud
 VITE_CONVEX_SITE_URL=https://your-deployment.convex.site
 
 # Your app URL
-SITE_URL=http://localhost:3000
+SITE_URL=http://localhost:3002
 
 # Google OAuth (from Google Cloud Console)
 GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
@@ -183,7 +183,7 @@ npx convex dev  # Terminal 1
 npm run dev     # Terminal 2
 ```
 
-2. Visit `http://localhost:3000`
+2. Visit `http://localhost:3002`
 3. Click "Sign in with Google"
 4. Should redirect to Google OAuth consent
 5. After consent, should redirect back authenticated

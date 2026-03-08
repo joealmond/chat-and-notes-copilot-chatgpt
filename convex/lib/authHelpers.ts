@@ -55,11 +55,17 @@
  */
 
 import { authComponent } from '../auth'
-import { ADMIN_EMAILS } from './config'
+import { ConvexError } from 'convex/values'
+import { ADMIN_EMAILS, WORKSPACE_ROLES, type WorkspaceRole } from './config'
 import type { QueryCtx, MutationCtx } from '../_generated/server'
+import type { Doc, Id } from '../_generated/dataModel'
 
 /** Context type for queries and mutations */
 type AuthContext = QueryCtx | MutationCtx
+export type WorkspaceId = Id<'workspaces'>
+export type WorkspaceDoc = Doc<'workspaces'>
+export type WorkspaceMemberDoc = Doc<'workspaceMembers'>
+export type UserProfileDoc = Doc<'userProfiles'>
 
 /**
  * User type returned by Better Auth Convex adapter.
@@ -147,4 +153,133 @@ export async function requireAdmin(ctx: AuthContext): Promise<AuthUser> {
     throw new Error('Admin access required')
   }
   return user
+}
+
+export async function getUserProfile(
+  ctx: AuthContext,
+  userId: string
+): Promise<UserProfileDoc | null> {
+  return await ctx.db.query('userProfiles').withIndex('by_user_id', (q) => q.eq('userId', userId)).unique()
+}
+
+export async function getCurrentUserProfile(ctx: AuthContext): Promise<UserProfileDoc | null> {
+  const user = await requireAuth(ctx)
+  return await getUserProfile(ctx, user._id)
+}
+
+export async function ensureUserProfile(ctx: MutationCtx, user: AuthUser): Promise<UserProfileDoc> {
+  const existing = await getUserProfile(ctx, user._id)
+  const now = Date.now()
+
+  if (existing) {
+    await ctx.db.patch(existing._id, {
+      displayName: user.name,
+      avatarUrl: user.image ?? undefined,
+      updatedAt: now,
+    })
+
+    return {
+      ...existing,
+      displayName: user.name,
+      avatarUrl: user.image ?? undefined,
+      updatedAt: now,
+    }
+  }
+
+  const profileId = await ctx.db.insert('userProfiles', {
+    userId: user._id,
+    username: undefined,
+    displayName: user.name,
+    avatarUrl: user.image ?? undefined,
+    createdAt: now,
+    updatedAt: now,
+  })
+
+  const profile = await ctx.db.get(profileId)
+  if (!profile) {
+    throw new ConvexError('Failed to create user profile')
+  }
+
+  return profile
+}
+
+export async function getWorkspaceMember(
+  ctx: AuthContext,
+  workspaceId: WorkspaceId,
+  userId: string
+): Promise<WorkspaceMemberDoc | null> {
+  return await ctx.db
+    .query('workspaceMembers')
+    .withIndex('by_workspace_user', (q) => q.eq('workspaceId', workspaceId).eq('userId', userId))
+    .unique()
+}
+
+export async function requireWorkspaceMember(
+  ctx: AuthContext,
+  workspaceId: WorkspaceId,
+  userId?: string
+): Promise<WorkspaceMemberDoc> {
+  const resolvedUserId = userId ?? (await requireAuth(ctx))._id
+  const membership = await getWorkspaceMember(ctx, workspaceId, resolvedUserId)
+
+  if (!membership) {
+    throw new ConvexError('Workspace membership required')
+  }
+
+  return membership
+}
+
+export async function requireWorkspaceRole(
+  ctx: AuthContext,
+  workspaceId: WorkspaceId,
+  allowedRoles: WorkspaceRole[],
+  userId?: string
+): Promise<WorkspaceMemberDoc> {
+  const membership = await requireWorkspaceMember(ctx, workspaceId, userId)
+  if (!allowedRoles.includes(membership.role)) {
+    throw new ConvexError('Insufficient workspace permissions')
+  }
+  return membership
+}
+
+export async function requireWorkspaceAdmin(
+  ctx: AuthContext,
+  workspaceId: WorkspaceId,
+  userId?: string
+): Promise<WorkspaceMemberDoc> {
+  return await requireWorkspaceRole(ctx, workspaceId, [WORKSPACE_ROLES.OWNER, WORKSPACE_ROLES.ADMIN], userId)
+}
+
+export async function getActiveWorkspace(
+  ctx: AuthContext,
+  userId?: string
+): Promise<WorkspaceDoc | null> {
+  const resolvedUserId = userId ?? (await requireAuth(ctx))._id
+  const profile = await getUserProfile(ctx, resolvedUserId)
+
+  if (profile?.activeWorkspaceId) {
+    return await ctx.db.get(profile.activeWorkspaceId)
+  }
+
+  const membership = await ctx.db
+    .query('workspaceMembers')
+    .withIndex('by_user', (q) => q.eq('userId', resolvedUserId))
+    .first()
+
+  if (!membership) {
+    return null
+  }
+
+  return await ctx.db.get(membership.workspaceId)
+}
+
+export async function requireActiveWorkspace(
+  ctx: AuthContext,
+  userId?: string
+): Promise<WorkspaceDoc> {
+  const workspace = await getActiveWorkspace(ctx, userId)
+  if (!workspace) {
+    throw new ConvexError('No active workspace found')
+  }
+  return workspace
 }

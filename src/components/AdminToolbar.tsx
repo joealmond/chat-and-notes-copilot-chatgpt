@@ -14,16 +14,16 @@ export function AdminToolbar() {
   if (!isRealAdmin) return null
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex items-center gap-2 bg-background/95 backdrop-blur border border-border rounded-lg shadow-lg p-2">
+    <div className="fixed bottom-4 right-4 z-50 flex items-center gap-2 border border-border bg-panel px-2 py-2">
       {isViewingAsUser ? (
         <>
-          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-md bg-yellow-500/20 text-yellow-600 border border-yellow-500/50">
+          <span className="inline-flex items-center gap-1 border border-border px-2 py-1 text-xs font-medium text-foreground">
             <Eye className="h-3 w-3" />
             Viewing as User
           </span>
           <button
             onClick={stopViewingAsUser}
-            className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
+            className="inline-flex items-center gap-1 border border-border px-2 py-1 text-xs font-medium text-foreground transition hover:bg-panel-muted"
           >
             <Shield className="h-3 w-3" />
             Back to Admin
@@ -31,13 +31,13 @@ export function AdminToolbar() {
         </>
       ) : (
         <>
-          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-md bg-primary/20 text-primary border border-primary/50">
+          <span className="inline-flex items-center gap-1 border border-border px-2 py-1 text-xs font-medium text-foreground">
             <Shield className="h-3 w-3" />
             Admin Mode
           </span>
           <button
             onClick={toggleViewAsUser}
-            className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-md bg-muted hover:bg-muted/80 text-muted-foreground transition-colors"
+            className="inline-flex items-center gap-1 border border-border px-2 py-1 text-xs font-medium text-muted-foreground transition hover:bg-panel-muted hover:text-foreground"
           >
             <EyeOff className="h-3 w-3" />
             View as User

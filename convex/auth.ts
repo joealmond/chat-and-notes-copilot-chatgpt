@@ -34,6 +34,12 @@ function getEnvConfig() {
     siteUrl: siteUrl || 'https://placeholder.convex.site',
     googleClientId: googleClientId || 'placeholder-client-id',
     googleClientSecret: googleClientSecret || 'placeholder-client-secret',
+    trustedOrigins: [
+      'http://localhost:3002',
+      'http://127.0.0.1:3002',
+      'http://localhost:8787',
+      siteUrl,
+    ].filter((origin): origin is string => Boolean(origin)),
     isConfigured: missing.length === 0,
   }
 }
@@ -48,6 +54,7 @@ export const authComponent = createClient<DataModel>(components.betterAuth)
 export const createAuth = (ctx: GenericCtx<DataModel>) => {
   return betterAuth({
     baseURL: envConfig.siteUrl,
+    trustedOrigins: envConfig.trustedOrigins,
     database: authComponent.adapter(ctx),
     // Google OAuth
     socialProviders: {

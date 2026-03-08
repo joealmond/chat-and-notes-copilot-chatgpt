@@ -6,7 +6,6 @@ import { Toaster } from 'sonner'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { ImpersonateProvider } from '@/hooks/use-impersonate'
 import { AdminToolbar } from '@/components/AdminToolbar'
-import { ThemeToggle } from '@/components/ThemeToggle'
 import { authClient } from '@/lib/auth-client'
 import { getToken } from '@/lib/auth-server'
 import type { QueryClient } from '@tanstack/react-query'
@@ -27,14 +26,21 @@ export const Route = createRootRouteWithContext<{
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'Convex + TanStack + Cloudflare' },
-      { name: 'description', content: 'Production-ready full-stack template' },
+      { title: 'Workspace OS' },
+      { name: 'description', content: 'Markdown notes, real-time chat, and publishing on Convex.' },
     ],
-    links: [{ rel: 'icon', href: '/favicon.ico' }],
+    links: [
+      { rel: 'icon', href: '/favicon.ico' },
+      { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+      { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap',
+      },
+    ],
     scripts: [
       {
-        // Prevent dark mode flash (FOUC) by applying theme before paint
-        children: `(function(){try{var t=localStorage.getItem('theme-preference');var d=t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme:dark)').matches);document.documentElement.classList.toggle('dark',d)}catch(e){}}())`,
+        children: `document.documentElement.classList.add('dark')`,
       },
     ],
   }),
@@ -64,7 +70,7 @@ function RootComponent() {
       authClient={authClient}
       initialToken={context.token}
     >
-      <html lang="en" suppressHydrationWarning>
+      <html lang="en" className="dark" suppressHydrationWarning>
         <head>
           <HeadContent />
         </head>
@@ -73,7 +79,6 @@ function RootComponent() {
             <ErrorBoundary>
               <Outlet />
             </ErrorBoundary>
-            <ThemeToggle />
             <AdminToolbar />
             <Toaster />
           </ImpersonateProvider>
